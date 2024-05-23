@@ -5,6 +5,7 @@
 package modelo;
 
 import controlador.ContactoController;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,6 +16,11 @@ import java.util.List;
 public class ContactoModelImpl implements ContactoModel {
 
     private ContactoController controller;
+    private List<Contacto> contactos;
+
+    public ContactoModelImpl() {
+        contactos = new ArrayList<Contacto>();
+    }
 
     public ContactoController getController() {
         return controller;
@@ -25,29 +31,35 @@ public class ContactoModelImpl implements ContactoModel {
     }
 
     public void nuevoContacto(Contacto contacto) {
-        throw new UnsupportedOperationException();
+        contactos.add(contacto);
+        this.controller.fireDataModelChanged();
     }
 
     public void eliminarContacto(Contacto contacto) {
-        throw new UnsupportedOperationException();
+        contactos.remove(obtenerContacto(contacto.getNombre()));
+        this.controller.fireDataModelChanged();
     }
 
     public Contacto obtenerContacto(String nombre) {
-        throw new UnsupportedOperationException();
+        for (Contacto contacto : contactos) {
+            if (contacto.getNombre().equals(nombre)) {
+                return contacto;
+            }
+        }
+        return null;
     }
 
     public void actualizarContacto(Contacto contacto) {
-        throw new UnsupportedOperationException();  
-
+        for (int i = 0; i < contactos.size(); i++) {
+            if (contactos.get(i).getNombre().equals(contacto.getNombre())) {
+                contactos.set(i, contacto);
+                break;
+            }
+        }
+        this.controller.fireDataModelChanged();
     }
 
     public List<Contacto> obtenerContactos() {
-        throw new UnsupportedOperationException();
-    }
-
- 
-
-    protected void fireModelChanged() {
-        getController().fireDataModelChanged();
+        return contactos;
     }
 }

@@ -37,22 +37,55 @@ public class ContactoViewImpl extends javax.swing.JFrame implements ContactoView
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelDown = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableContactos = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión de Contactos");
+
+        jPanelDown.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanelDown.setLayout(new javax.swing.BoxLayout(jPanelDown, javax.swing.BoxLayout.LINE_AXIS));
+
+        jTableContactos.setModel(tableModel);
+        jTableContactos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableContactosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableContactos);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 578, Short.MAX_VALUE)
+            .add(layout.createSequentialGroup()
+                .add(26, 26, 26)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane1)
+                    .add(jPanelDown, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE))
+                .add(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 494, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .add(27, 27, 27)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 129, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 41, Short.MAX_VALUE)
+                .add(jPanelDown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 259, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(38, 38, 38))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTableContactosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContactosMouseClicked
+        // TODO add your handling code here:
+        ContactosTableModel ctm = (ContactosTableModel) this.jTableContactos.getModel();
+        Contacto contacto = ctm.getRow(this.jTableContactos.getSelectedRow());
+        panelContacto.setContacto(contacto);
+    }//GEN-LAST:event_jTableContactosMouseClicked
+
 
     /**
      * @param args the command line arguments
@@ -67,7 +100,55 @@ public class ContactoViewImpl extends javax.swing.JFrame implements ContactoView
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanelDown;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableContactos;
     // End of variables declaration//GEN-END:variables
 
+     public ContactoController getController() {
+        return controller;
+    }
+
+    public void setController(ContactoController controller) {
+        this.controller = controller;
+    }
+
+    public ContactoModel getModel() {
+        return model;
+    }
+
+    public void setModel(ContactoModel model) {
+        this.model = model;
+    }
+
+    public void dataModelChanged() {
+        refresh();
+    }
+
+    public void display() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                setVisible(true);
+                refresh();
+            }
+        });
+    }
+
+    protected void refresh() {
+        tableModel.setContactos(getModel().obtenerContactos());//cambia el modelo de JTable(TableModel) por medio de una clase que hemos creado (ContactosTableModel)
+    }
+
+    protected void fireNuevoContactoGesture(String nombre, String tlf, String email) {
+        getController().nuevoContactoGesture(nombre, tlf, email);
+    }
+
+    protected void fireActualizaContactoGesture(String nombre, String tlf, String email) {
+        getController().actualizaContactoGesture(nombre, tlf, email);
+    }
+
+    protected void fireBorraContactoGesture(String nombre) {
+        getController().borraContactoGesture(nombre);
+    }
 
 }

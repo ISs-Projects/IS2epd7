@@ -11,5 +11,12 @@ import modelo.ContactoModel;
  */
 public interface ContactoView {
 
+    ContactoController getController();
+    void setController(ContactoController controller);
 
+    ContactoModel getModel();
+    void setModel(ContactoModel model);
+
+    void dataModelChanged();
+    void display();
 }
